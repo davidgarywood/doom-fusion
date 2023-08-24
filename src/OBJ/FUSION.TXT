@@ -1,0 +1,107 @@
+// This is the Fusion Release, v1.0 copyright David Gary Wood 1999
+// Assorted bits of documentation and code copyright Len Pitre 2002
+
+8/31/2002
+
+L. Pitre: Actually got up the incentive to do a release. It's as done
+as it's going to get. How to use it: Put it in your Doom directory,
+in general it's going to work just like Boom or MBF. Indeed, you could
+rename the EXE to boom.exe or mbf.exe and batch files/editors/Windows
+wouldn't even notice. (The odds of Fusion not working on Boom-friendly
+system is about 1/1000, at a guess.)
+
+Demos of the special effects available, like the low-grav linedef and
+the new codepointers, in textdemo.zip 
+
+For more info on this release, please visit
+http://archonrealm.tripod.ca/fusion.htm 
+
+(Below is the coder (David Wood's) "recent" changelog, as complete as 
+I can get it.)
+
+10/7/1999
+
+Backed out the mlook firing aiming code...it fekked up the
+auto-aiming code :) Should get it sorted soon.
+
+Re-added in the 'shooters' (mobj#'s 10131) from february,
+should get a test wad for them made again soon.
+
+
+9/21/1999
+
+* Preliminary Mlook Code is back, jumping code is back.
+* Support for SMMU's extended sector flags (bits 10/11 if I recall
+correct) has been added; these affect sound activations in sectors
+* In test is Len's SkillJump codepointer, to let the skill setting
+affect which frame a mobj jumps to.
+* Comment lines in DEH can now be started with a / 
+this allows for C-style comments (// heh ;)
+
+The revised code for this is: 
+
+void A_SkillJump(mobj_t *actor) // 9/21/1999 Hakx
+{
+  if (gameskill <= sk_easy);
+    {
+      P_SetMobjState(actor, actor->state->misc1);
+      return;
+    }
+
+  if (gameskill >= sk_hard);
+    {
+      P_SetMobjState(actor, actor->state->misc2);
+      return;
+    }
+}
+
+
+Unfortunately, somehow, someway, this doesn't actually appear to work
+and I have no idea how it doesn't work yet...still investigating now.
+The DEH I have been using to test it is this:
+
+###########
+Frame 454
+Unknown 1 = 440
+Unknown 2 = 554
+
+[CODEPTR]
+FRAME 454 = SkillJump
+###########
+
+It appears to be using 440 whatever the skill -shame, but I'll track
+it down tommorrow, need sleep atm :)
+
+Next on my list of things to do is some of the Mordeth related stuff;
+weather FX and water fx. Water FX is pretty much highest on my priority
+out of the two.
+
+
+8/2/1999
+After running with a segVIOL in DOS in the last build, I have cleaned things
+up ALOT, and now the only things that exist in this build are:
+* the bugfixes
+  -MBF/ORIG Invisibility
+  -ALL Projectiles can't activate lifts
+  -Render no-texture 1s wall as passble 2s wall
+  -nonstat of the vissprite to work-around poss DJGPP mem bug.
+* the codepointers
+  -all the fusion-unique codepointers (including the special ones created
+   by Len Pitre)
+  -NB: Documentation of these will be included in the next build; otherwise
+   see prev. build's docs.
+* the Translucency Table fx
+  -different things can now have a different tranmap for their percentage
+   of translucency; thus enabling wad authors to control all the looks of
+   the things in their levels. See TRANTEST.ZIP
+
+-- NOTES:
+Any bugs, PLEASE report. The jumping code/mlook code will be left out until
+further coding of actual level/wad authoring features are completed; I think
+it is the mlook code that is 'breaking' builds atm, and would prefer to make
+some headway in other areas before returning to it.
+Features/Bugfixes to be checked into for the next beta are:
+-the MBF trigger bugs
+-Z-clipping
+-Hexen/ZDoom map format (arg's 3-5, Z-coords for things set in map, etc).
+
